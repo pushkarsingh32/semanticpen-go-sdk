@@ -25,11 +25,10 @@ func main() {
 	}
 
 	fmt.Printf("✅ Generation successful!\n")
-	fmt.Printf("   Article ID: %s\n", response.ArticleID)
+	articleID, _ := response.GetArticleID()
+	fmt.Printf("   Article ID: %s\n", articleID)
 	fmt.Printf("   Project ID: %s\n", response.ProjectID)
 	fmt.Printf("   Message: %s\n", response.Message)
-
-	articleID := response.ArticleID
 
 	// Check status periodically
 	fmt.Println("\n⏳ Checking status periodically...")

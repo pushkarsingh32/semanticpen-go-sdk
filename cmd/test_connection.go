@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/pushkarsingh32/semanticpen-go-sdk"
 )
@@ -45,7 +44,8 @@ func main() {
 	}
 
 	fmt.Println("✅ Connection is working (article generation successful)")
-	fmt.Printf("   Article ID: %s\n", response.ArticleID)
+	articleID, _ := response.GetArticleID()
+	fmt.Printf("   Article ID: %s\n", articleID)
 	fmt.Printf("   Project ID: %s\n", response.ProjectID)
 	fmt.Printf("   Message: %s\n", response.Message)
 }

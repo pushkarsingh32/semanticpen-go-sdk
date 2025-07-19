@@ -28,7 +28,7 @@ func (c *Client) GenerateArticle(targetKeyword string, options *GenerateArticleR
 		request.Advanced = options.Advanced
 	}
 
-	resp, err := c.makeRequest("POST", "/generate-article", request)
+	resp, err := c.makeRequest("POST", "/api/articles", request)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (c *Client) GetArticle(articleID string) (*Article, error) {
 		}
 	}
 
-	endpoint := fmt.Sprintf("/articles/%s", articleID)
+	endpoint := fmt.Sprintf("/api/articles/%s", articleID)
 	resp, err := c.makeRequest("GET", endpoint, nil)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func (c *Client) DeleteArticle(articleID string) error {
 		}
 	}
 
-	endpoint := fmt.Sprintf("/articles/%s", articleID)
+	endpoint := fmt.Sprintf("/api/articles/%s", articleID)
 	resp, err := c.makeRequest("DELETE", endpoint, nil)
 	if err != nil {
 		return err
@@ -137,7 +137,12 @@ func (c *Client) GenerateArticleAndWait(targetKeyword string, options *GenerateA
 		return nil, err
 	}
 
-	return c.WaitForArticle(result.ArticleID, waitOptions)
+	articleID, err := result.GetArticleID()
+	if err != nil {
+		return nil, err
+	}
+
+	return c.WaitForArticle(articleID, waitOptions)
 }
 
 // WaitForArticle waits for an article to complete generation

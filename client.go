@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	DefaultBaseURL = "https://semanticpen.vercel.app/api"
+	DefaultBaseURL = "https://www.semanticpen.com"
 	DefaultTimeout = 30 * time.Second
 )
 
@@ -97,21 +97,9 @@ func (c *Client) makeRequest(method, endpoint string, body interface{}) (*http.R
 	return resp, nil
 }
 
-// TestConnection tests the connection to the API
+// TestConnection tests the connection by making a simple API call
 func (c *Client) TestConnection() error {
-	resp, err := c.makeRequest("GET", "/test-connection", nil)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return &APIError{
-			StatusCode: resp.StatusCode,
-			Message:    string(body),
-		}
-	}
-
-	return nil
+	// Test connection by trying to generate a simple article
+	_, err := c.GenerateArticle("Connection test", nil)
+	return err
 }

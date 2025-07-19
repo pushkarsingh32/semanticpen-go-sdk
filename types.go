@@ -1,6 +1,9 @@
 package semanticpen
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // GenerateArticleRequest represents the request for generating an article
 type GenerateArticleRequest struct {
@@ -40,9 +43,23 @@ type WritingOptions struct {
 
 // GenerateArticleResponse represents the response from article generation
 type GenerateArticleResponse struct {
-	ArticleID string `json:"articleId"`
-	ProjectID string `json:"projectId"`
-	Message   string `json:"message"`
+	ArticleID      string   `json:"articleId,omitempty"`      // For backward compatibility
+	ArticleIDs     []string `json:"articleIds,omitempty"`     // Primary field returned by API
+	ProjectID      string   `json:"projectId"`
+	Message        string   `json:"message"`
+	ProcessingInfo *string  `json:"processingInfo,omitempty"`
+	Error          *string  `json:"error,omitempty"`
+}
+
+// GetArticleID returns the first article ID from the response, handling both formats
+func (r *GenerateArticleResponse) GetArticleID() (string, error) {
+	if r.ArticleID != "" {
+		return r.ArticleID, nil
+	}
+	if len(r.ArticleIDs) > 0 {
+		return r.ArticleIDs[0], nil
+	}
+	return "", fmt.Errorf("no articles were generated")
 }
 
 // Article represents an article with its status and content
